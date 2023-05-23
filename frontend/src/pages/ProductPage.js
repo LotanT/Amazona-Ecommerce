@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Rating from '../component/Rating';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Badge from 'react-bootstrap/Badge';
@@ -28,6 +28,7 @@ const reducer = (state, action) => {
 };
 
 const ProductPage = () => {
+  const navigate = useNavigate();
   const params = useParams();
   const { slug } = params;
   const [{ loading, error, product }, dispatch] = useReducer(reducer, {
@@ -63,6 +64,7 @@ const ProductPage = () => {
       type: 'ADD_CART_ITEM',
       payload: { ...product, quantity },
     });
+    navigate('/cart');
   };
 
   return loading ? (
