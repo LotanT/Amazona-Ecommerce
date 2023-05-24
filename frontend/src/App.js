@@ -15,6 +15,7 @@ import { Store } from './Store';
 import CartPage from './pages/CartPage';
 import SigninPage from './pages/SigninPage';
 import ShippingAddressPage from './pages/ShippingAddressPage';
+import SignupPage from './pages/SignupPage';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -25,7 +26,7 @@ function App() {
     localStorage.removeItem('userInfo');
     localStorage.removeItem('shippingAddress');
   };
-
+  console.log(userInfo);
   return (
     <BrowserRouter>
       <div className="d-flex flex-column site-container">
@@ -77,6 +78,7 @@ function App() {
               <Route path="/product/:slug" element={<ProductPage />} />
               <Route path="/cart" element={<CartPage />} />
               <Route path="/signin" element={<SigninPage />} />
+              <Route path="/signup" element={<SignupPage />} />
               <Route path="/shipping" element={<ShippingAddressPage />} />
               <Route path="/" element={<HomePage />} />
             </Routes>
