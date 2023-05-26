@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { Helmet } from 'react-helmet-async';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -8,9 +8,31 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import { Store } from '../Store';
 import CheckoutSteps from '../component/CheckoutSteps';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getError } from '../utils';
+import axios from 'axios';
+import LoadingBox from '../component/LoadingBox';
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'CREATE_REQUEST':
+      return { ...state, loading: true };
+    case 'CREATE_SUCCESS':
+      return { ...state, loading: false };
+    case 'CREATE_FAIL':
+      return { ...state, loading: false };
+    default:
+      return state;
+  }
+};
 
 const PlaceOrderPage = () => {
   const navigate = useNavigate();
+
+  const [{ loading }, dispatch] = useReducer(reducer, {
+    loading: false,
+  });
+
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
 
@@ -29,7 +51,33 @@ const PlaceOrderPage = () => {
   cart.taxPrice = round2(0.15 * cart.itemsPrice);
   cart.totalPrice = cart.taxPrice + cart.itemsPrice + cart.shippingPrice;
 
-  const placeOrderHandler = () => {};
+  const placeOrderHandler = async () => {
+    try {
+      dispatch({ type: 'CREAT_REQUEST' });
+      const { data } = await axios.post(
+        '/api/orders',
+        {
+          orderItems: cart.cartItems,
+          shippingAddress: cart.shippingAddress,
+          paymentMethod: cart.paymentMethod,
+          itemsPrice: cart.itemsPrice,
+          shippingPrice: cart.shippingPrice,
+          taxPrice: cart.taxPrice,
+          totalPrice: cart.totalPrice,
+        },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      ctxDispatch({ type: 'CART_CLEAR' });
+      dispatch({ type: 'CREATE_SECCESS' });
+      localStorage.removeItem('cartItems');
+      navigate(`/orders/${data.order._id}`);
+    } catch (err) {
+      dispatch({ type: 'CREAT_FAIL' });
+      toast.error(getError(err));
+    }
+  };
 
   return (
     <div>
@@ -136,6 +184,7 @@ const PlaceOrderPage = () => {
                       Place Order
                     </Button>
                   </div>
+                  {loading && <LoadingBox />}
                 </ListGroup.Item>
               </ListGroup>
             </Card.Body>
