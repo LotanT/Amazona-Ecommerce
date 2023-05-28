@@ -13,7 +13,6 @@ const reducer = (state, action) => {
     case 'FETCH_REQUEST':
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
-      console.log('hi');
       return { ...state, loading: false, orders: action.payload };
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
@@ -47,7 +46,7 @@ const OrderHistoryPage = () => {
     };
     fetchData();
   }, [userInfo]);
-  console.log(orders, loading);
+
   return (
     <div>
       <Helmet>

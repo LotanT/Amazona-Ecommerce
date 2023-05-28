@@ -1,11 +1,6 @@
-import express from 'express';
-import expressAsyncHandler from 'express-async-handler';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import seedRouter from './routes/seedRoutes.js';
-import productRouter from './routes/productRoutes.js';
-import userRouter from './routes/userRoute.js';
-import orderRouter from './routes/orderRoutes.js';
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
@@ -26,6 +21,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/keys/paypal', (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || 'sb');
 });
+
+const seedRouter = require('./routes/seedRoutes.js');
+const productRouter = require('./routes/productRoutes');
+const userRouter = require('./routes/userRoute');
+const orderRouter = require('./routes/orderRoutes');
 
 app.use('/api/seed', seedRouter);
 app.use('/api/products', productRouter);

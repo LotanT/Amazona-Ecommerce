@@ -29,7 +29,6 @@ const SigninPage = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(email, password);
     try {
       const { data } = await axios.post('/api/users/signin', {
         email,

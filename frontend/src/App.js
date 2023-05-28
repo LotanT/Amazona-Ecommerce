@@ -20,7 +20,6 @@ import PaymentMethodPage from './pages/PaymentMethodPage';
 import PlaceOrderPage from './pages/PlaceOrderPage';
 import OrderPage from './pages/OrderPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
-import NavbarCollapse from 'react-bootstrap/esm/NavbarCollapse';
 import ProfilePage from './pages/ProfilePage';
 
 function App() {
