@@ -68,7 +68,7 @@ const OrderPage = () => {
         const { data } = await axios.put(
           `/api/orders/${order._id}/pay`,
           details,
-          { headers: { authorization: `Bearer ${userInfo.token}` } }
+          { headers: { Authorization: `Bearer ${userInfo.token}` } }
         );
         dispatch({ type: 'PAY_SUCCESS', payload: data });
         toast.success('Order is paid');
@@ -87,7 +87,7 @@ const OrderPage = () => {
       try {
         dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get(`/api/orders/${orderId}`, {
-          headers: { authorization: `Bearer ${userInfo.token}` },
+          headers: { Authorization: `Bearer ${userInfo.token}` },
         });
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
